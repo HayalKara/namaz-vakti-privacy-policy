@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vakit Gizlilik Politikası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --bg: #F4F8F6;
+    --card: #FFFFFF;
+    --card-hl: #EAF6F0;
+    --line: #E2EAE7;
+    --text: #15241F;
+    --text-muted: #5F736D;
+    --accent: #189B5C;
+    --accent-deep: #0F7A46;
+    --on-accent: #FFFFFF;
+    --note-bg: #FFF6E2;
+    --note-line: #EEDCA8;
+    --note-text: #7A5600;
+    --todo-bg: #FDECEC;
+    --todo-line: #F3C6C6;
+    --todo-text: #9C3B3B;
+    --shadow: 0 1px 2px rgba(21,36,31,.04), 0 8px 24px rgba(21,36,31,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0E1613;
+      --card: #15211B;
+      --card-hl: #1B2B22;
+      --line: #28382F;
+      --text: #EAF3EE;
+      --text-muted: #9BB0A6;
+      --accent: #3BCB84;
+      --accent-deep: #5FDB9B;
+      --on-accent: #08130E;
+      --note-bg: #2A2311;
+      --note-line: #493D1C;
+      --note-text: #E4C167;
+      --todo-bg: #2C1A1A;
+      --todo-line: #4A2626;
+      --todo-text: #E39A9A;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lexend', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; }
+  h1, h2, h3 { font-weight: 800; text-wrap: balance; }
+  strong { font-weight: 700; }
+  a { color: var(--accent-deep); }
+
+  /* ---------- Geometric header motif (girih-style, no figurative imagery) ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--card-hl), var(--bg));
+    border-bottom: 1px solid var(--line);
+    padding: 56px 24px 40px;
+  }
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: .16;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .02em;
+    color: var(--accent-deep);
+    margin-bottom: 28px;
+  }
+  .mark svg { width: 22px; height: 22px; }
+  .hero h1 {
+    font-size: clamp(30px, 4.2vw, 42px);
+    line-height: 1.12;
+    margin: 0 0 14px;
+  }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-top: 22px;
+  }
+  .chip {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip b { color: var(--text); font-weight: 700; }
+
+  /* ---------- Page shell: sidebar TOC + reading column ---------- */
+  .shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 44px 24px 100px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 700px);
+    gap: 56px;
+    justify-content: center;
+  }
+  @media (max-width: 880px) {
+    .shell { grid-template-columns: 1fr; padding: 28px 18px 72px; }
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 28px;
+    align-self: start;
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  nav.toc .toc-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 12px;
+  }
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--line);
+  }
+  nav.toc li { margin: 0; }
+  nav.toc a {
+    display: block;
+    padding: 6px 0 6px 16px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color .15s, border-color .15s;
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--text); border-left-color: var(--line); }
+  nav.toc a span { color: var(--text-muted); font-variant-numeric: tabular-nums; margin-right: 8px; }
+
+  @media (max-width: 880px) {
+    nav.toc {
+      position: static;
+      max-height: none;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 4px 18px;
+      box-shadow: var(--shadow);
+    }
+    nav.toc ol { border-left: none; display: none; padding: 4px 0 14px; }
+    nav.toc[open] ol { display: block; }
+    nav.toc summary { cursor: pointer; padding: 16px 0; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    nav.toc summary::-webkit-details-marker { display: none; }
+    nav.toc summary::after { content: '▾'; color: var(--text-muted); font-size: 12px; }
+    nav.toc[open] summary::after { content: '▴'; }
+    nav.toc a { padding-left: 14px; }
+  }
+
+  main { min-width: 0; }
+
+  .lede {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 44px;
+    box-shadow: var(--shadow);
+    font-size: 14.5px;
+    color: var(--text-muted);
+  }
+  .lede strong { color: var(--text); }
+
+  section.policy-section {
+    padding: 34px 0;
+    border-top: 1px solid var(--line);
+  }
+  section.policy-section:first-of-type { border-top: none; padding-top: 0; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .section-num {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-deep);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  h2 { font-size: 21px; margin: 0; scroll-margin-top: 24px; }
+
+  section.policy-section p { margin: 0 0 14px; font-size: 15.5px; }
+  section.policy-section p:last-child { margin-bottom: 0; }
+  section.policy-section ul { margin: 0 0 14px; padding-left: 22px; font-size: 15.5px; }
+  section.policy-section ul:last-child { margin-bottom: 0; }
+  section.policy-section li { margin-bottom: 6px; }
+  section.policy-section li:last-child { margin-bottom: 0; }
+
+  .callout {
+    background: var(--card-hl);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 14.5px;
+    margin: 16px 0;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .note {
+    background: var(--note-bg);
+    border: 1px solid var(--note-line);
+    color: var(--note-text);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 14px;
+    margin: 16px 0;
+  }
+  .note p:last-child { margin-bottom: 0; }
+  .note strong { color: inherit; }
+
+  .todo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    background: var(--todo-bg);
+    border: 1px dashed var(--todo-line);
+    color: var(--todo-text);
+    border-radius: 7px;
+    padding: 1px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    white-space: nowrap;
+  }
+
+  .data-table-wrap { overflow-x: auto; margin: 16px 0; border: 1px solid var(--line); border-radius: 12px; }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: var(--card);
+  }
+  table.data-table th, table.data-table td {
+    text-align: left;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.data-table th {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--card-hl);
+  }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table td:first-child, table.data-table th:first-child { font-weight: 600; }
+
+  .host-options {
+    display: grid;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .host-option {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 13px 15px;
+    font-size: 14px;
+  }
+  .host-option b { font-size: 14.5px; }
+  .host-num { font-weight: 800; color: var(--accent-deep); font-size: 14px; }
+
+  code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: .92em;
+    background: var(--card-hl);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
+
+  footer {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  @media (max-width: 880px) { footer { padding: 0 18px 48px; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <svg class="hero-pattern" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="girih" width="80" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(15)">
+        <g fill="none" stroke="var(--accent-deep)" stroke-width="1.1">
+          <path d="M40 4 L76 40 L40 76 L4 40 Z"/>
+          <path d="M40 4 L40 76 M4 40 L76 40"/>
+          <circle cx="40" cy="40" r="14"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect width="800" height="300" fill="url(#girih)"/>
+  </svg>
+  <div class="hero-inner">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2 L21 7 L21 17 L12 22 L3 17 L3 7 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 2 V22 M3 7 L21 17 M21 7 L3 17" stroke="currentColor" stroke-width="1.1" opacity=".55"/></svg>
+      VAKİT
+    </div>
+    <h1>Gizlilik Politikası</h1>
+    <p style="max-width:56ch; color:var(--text-muted); font-size:15.5px; margin:0;">
+      Bu belge, uygulamanın gerçek kodu tek tek denetlenerek yazılmıştır;
+      burada anlatılanların dışında hiçbir veri işleme yapılmaz.
+    </p>
+    <div class="hero-meta">
+      <span class="chip">Uygulama: <b>Vakit — Namaz Vakitleri</b></span>
+      <span class="chip">Paket: <b>com.vakit.namazvakitleri</b></span>
+      <span class="chip">Yürürlük: <b>4 Eylül 2026</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="toc" id="toc">
+    <details id="toc-details">
+      <summary><span class="toc-label" style="margin:0;">İçindekiler</span></summary>
+      <ol>
+        <li><a href="#s1"><span>01</span>Giriş</a></li>
+        <li><a href="#s2"><span>02</span>Veri Sorumlusu</a></li>
+        <li><a href="#s3"><span>03</span>Hangi Verileri İşliyoruz?</a></li>
+        <li><a href="#s4"><span>04</span>Kullanım Amaçları</a></li>
+        <li><a href="#s5"><span>05</span>Konum Verisi</a></li>
+        <li><a href="#s6"><span>06</span>Bildirimler</a></li>
+        <li><a href="#s7"><span>07</span>Cihaz ve Teknik Bilgi</a></li>
+        <li><a href="#s8"><span>08</span>Yerel Depolanan Veri</a></li>
+        <li><a href="#s9"><span>09</span>Üçüncü Taraf Hizmetler</a></li>
+        <li><a href="#s10"><span>10</span>Reklam ve Analitik</a></li>
+        <li><a href="#s11"><span>11</span>Veri Paylaşımı</a></li>
+        <li><a href="#s12"><span>12</span>Veri Güvenliği</a></li>
+        <li><a href="#s13"><span>13</span>Saklama Süresi</a></li>
+        <li><a href="#s14"><span>14</span>Silme ve Haklarınız</a></li>
+        <li><a href="#s15"><span>15</span>Çocukların Gizliliği</a></li>
+        <li><a href="#s16"><span>16</span>Uluslararası Aktarım</a></li>
+        <li><a href="#s17"><span>17</span>Politika Değişiklikleri</a></li>
+        <li><a href="#s18"><span>18</span>İletişim</a></li>
+        <li><a href="#s19"><span>19</span>Yürürlük Tarihi</a></li>
+      </ol>
+    </details>
+  </nav>
+
+  <main>
+    <div class="lede">
+      <strong>Vakit</strong>, namaz vakitlerini, kıble yönünü ve tesbih sayacını
+      gösteren sade bir uygulamadır. Bu politika, uygulamanın <strong>gerçek
+      teknik davranışının</strong> koddan doğrudan incelenmesiyle yazılmıştır.
+    </div>
+
+    <section class="policy-section" id="s1">
+      <div class="section-head"><span class="section-num">01</span><h2>Giriş</h2></div>
+      <p>Bu Gizlilik Politikası, Vakit uygulamasının ("Vakit", "uygulama") hangi verileri işlediğini, bu verileri neden işlediğini ve verilerinizin nasıl korunduğunu açıklar.</p>
+      <p>Bu politika, uygulamanın <strong>gerçek teknik davranışının</strong> koddan doğrudan incelenmesiyle yazılmıştır; burada anlatılanların dışında bir veri işleme yapılmamaktadır.</p>
+    </section>
+
+    <section class="policy-section" id="s2">
+      <div class="section-head"><span class="section-num">02</span><h2>Veri Sorumlusu / Geliştirici Bilgileri</h2></div>
+      <p>Vakit uygulamasının geliştiricisi ve veri sorumlusu:</p>
+      <ul>
+        <li><strong>Ad/Unvan:</strong> VeraAi</li>
+        <li><strong>E-posta:</strong> <a href="mailto:haydarkara@gmail.com">haydarkara@gmail.com</a></li>
+      </ul>
+    </section>
+
+    <section class="policy-section" id="s3">
+      <div class="section-head"><span class="section-num">03</span><h2>Hangi Verileri İşliyoruz?</h2></div>
+      <p>Vakit, bir <strong>hesap sistemi içermez</strong>: kayıt olma, giriş yapma, ad, e-posta, telefon numarası veya profil bilgisi toplanmaz.</p>
+      <p>Uygulamanın işlediği veriler şunlarla sınırlıdır:</p>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Veri</th><th>Nereden gelir</th><th>Cihazda mı kalır, sunucuya mı gider?</th></tr></thead>
+          <tbody>
+            <tr><td>Konum (GPS enlem/boylam)</td><td>Cihazınızın konum servisi (izin verirseniz)</td><td>Yalnızca cihazda saklanır. Sunucuya <strong>gönderilmez</strong>.</td></tr>
+            <tr><td>Seçtiğiniz şehir</td><td>Elle seçiminiz veya GPS'e en yakın il</td><td>Cihazda saklanır; servise yalnızca bir <strong>il kimliği</strong> (sayısal kod) iletilir.</td></tr>
+            <tr><td>Namaz vakitleri verisi</td><td>Namaz vakti servisinden indirilir</td><td>Cihazda önbelleğe alınır (çevrimdışı kullanım için).</td></tr>
+            <tr><td>Kılınan namaz kayıtlarınız</td><td>Uygulama içi işaretlemeleriniz</td><td>Yalnızca cihazda; 30 gün sonra otomatik silinir.</td></tr>
+            <tr><td>Bildirim ve ses tercihleriniz</td><td>Ayarlar ekranındaki seçimleriniz</td><td>Yalnızca cihazda saklanır.</td></tr>
+            <tr><td>Tesbih sayacı verileri</td><td>Uygulama içi kullanımınız</td><td>Yalnızca cihazda saklanır.</td></tr>
+            <tr><td>Yazı boyutu ve görünüm tercihleri</td><td>Ayarlar ekranındaki seçimleriniz</td><td>Yalnızca cihazda saklanır.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <p><strong>Toplanmayan veriler:</strong> Ad, soyad, e-posta, telefon numarası, hesap bilgileri, ödeme bilgileri, reklam kimliği, kullanım analitiği, çökme (crash) kayıtları, cihaz kimliği veya herhangi bir izleyici/analiz verisi toplanmaz.</p>
+      </div>
+    </section>
+
+    <section class="policy-section" id="s4">
+      <div class="section-head"><span class="section-num">04</span><h2>Verileri Hangi Amaçlarla Kullanıyoruz?</h2></div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Veri</th><th>Amaç</th></tr></thead>
+          <tbody>
+            <tr><td>Konum</td><td>En yakın ili bulmak (namaz vakti hesabı) ve kıble yönünü hesaplamak</td></tr>
+            <tr><td>Seçilen şehir / il kimliği</td><td>Doğru namaz vakitlerini servisten almak</td></tr>
+            <tr><td>Namaz vakitleri önbelleği</td><td>Vakitleri internet olmadan da gösterebilmek</td></tr>
+            <tr><td>Kılınan namaz kayıtları</td><td>Günlük namaz takibinizi uygulama içinde göstermek</td></tr>
+            <tr><td>Bildirim tercihleri</td><td>Vakti girdiğinde (istediğiniz vakitler için) hatırlatma göndermek</td></tr>
+            <tr><td>Tesbih sayacı</td><td>Sayaç durumunuzu bir sonraki açılışta koruyabilmek</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Verileriniz bu amaçlar dışında <strong>hiçbir şekilde</strong> kullanılmaz; reklam hedeflemesi, profil oluşturma veya pazarlama amacıyla işlenmez.</p>
+    </section>
+
+    <section class="policy-section" id="s5">
+      <div class="section-head"><span class="section-num">05</span><h2>Konum Verilerinin Kullanımı</h2></div>
+      <p>Vakit, konum iznini <strong>yalnızca kullanım sırasında</strong> ister (arka planda konum takibi yapılmaz; bu, uygulama yapılandırmasında açıkça kapalıdır). Konum izni tamamen isteğe bağlıdır — reddederseniz uygulama şehir listesinden elle seçim yaparak normal şekilde çalışmaya devam eder.</p>
+      <div class="callout">
+        <p><strong>Konum bilgisi ile namaz vakti servisine giden bilgiyi birbirinden ayırmak önemlidir:</strong></p>
+        <ul>
+          <li>GPS konumunuz alındığında, bu bilgi <strong>yalnızca cihazınızda</strong>, Türkiye'nin 81 iline ait sabit bir tablo ile karşılaştırılarak size en yakın ili bulmak için kullanılır. Herhangi bir sunucuya sorgu gönderilmez.</li>
+          <li>Namaz vakti servisine yalnızca bulunan ilin <strong>sayısal kimlik kodu</strong> gönderilir (örnek: Ankara için <code>9206</code>). Enlem/boylam bilgisi hiçbir zaman ağ üzerinden gönderilmez.</li>
+          <li>GPS konumunuz ayrıca kıble yönünü hesaplamak için kullanılır; bu hesaplama da tamamen cihaz üzerinde yapılır.</li>
+          <li>GPS konumunuz, kıble hesaplamasının il merkezinden değil gerçek konumunuzdan yapılabilmesi için cihazınızda saklanır — şehir değiştirene ya da uygulamayı silene kadar. Sunucuya hiçbir zaman aktarılmaz.</li>
+        </ul>
+      </div>
+      <p>Yalnızca bir şehir seçtiğinizde (GPS kullanmadan) yalnızca o şehrin adı ve il kimliği saklanır; GPS konumu istenmez ve saklanmaz.</p>
+    </section>
+
+    <section class="policy-section" id="s6">
+      <div class="section-head"><span class="section-num">06</span><h2>Bildirimler</h2></div>
+      <p>Vakit, namaz vakti hatırlatmalarını <strong>tamamen cihazınızda, yerel olarak</strong> zamanlar. Bu bildirimler:</p>
+      <ul>
+        <li>Cihazınızın önbelleğe alınmış namaz vakitleri verisinden hesaplanır,</li>
+        <li>Cihazınızın kendi işletim sistemi tarafından, belirlenen saatte tetiklenir,</li>
+        <li><strong>Herhangi bir uzak sunucudan "push" (itme) bildirimi olarak gönderilmez.</strong></li>
+      </ul>
+      <p>Uygulama, bildirim göndermek için hiçbir sunucuya kayıt olmaz; bir "push token" (itme bildirimi belirteci) oluşturulmaz veya paylaşılmaz. Bildirim izni vermek isteğe bağlıdır ve reddedilebilir; bu durumda uygulama bildirimsiz çalışmaya devam eder. Hangi vakitler için bildirim almak istediğinizi Ayarlar ekranından vakit bazında açıp kapatabilirsiniz.</p>
+    </section>
+
+    <section class="policy-section" id="s7">
+      <div class="section-head"><span class="section-num">07</span><h2>Cihaz ve Teknik Bilgiler</h2></div>
+      <p>Vakit, cihaz modeli, işletim sistemi sürümü, reklam kimliği veya benzeri bir cihaz/tarayıcı parmak izi bilgisini <strong>okumaz ve toplamaz</strong>. Uygulama sürüm numarası yalnızca "Hakkında" ekranında görüntüleme amacıyla, cihaz üzerinde kullanılır; herhangi bir sunucuya gönderilmez.</p>
+    </section>
+
+    <section class="policy-section" id="s8">
+      <div class="section-head"><span class="section-num">08</span><h2>Yerel Olarak Saklanan Veriler</h2></div>
+      <p>Aşağıdaki veriler, Android'in standart uygulama-içi depolama mekanizmasıyla <strong>yalnızca cihazınızda</strong> tutulur ve hiçbir sunucuya senkronize edilmez:</p>
+      <ul>
+        <li>Seçili şehir, il kimliği ve (varsa) GPS konumu</li>
+        <li>İndirilmiş namaz vakitleri önbelleği</li>
+        <li>Kılınan namaz kayıtlarınız (30 gün sonra otomatik silinir)</li>
+        <li>Vakit bazlı bildirim ve ses tercihleriniz</li>
+        <li>Tesbih sayacı, tur sayısı ve hedef ayarınız</li>
+        <li>Yazı boyutu ve diğer görünüm tercihleriniz</li>
+      </ul>
+      <p>Bu verilerin tamamı, <strong>uygulamayı cihazınızdan kaldırdığınızda otomatik olarak silinir.</strong> Cihazınızın işletim sistemi ayarlarına bağlı olarak bu veriler, cihazınızın genel yedekleme sistemi (ör. Google hesabınıza bağlı cihaz yedeği) kapsamına dahil olabilir; bu, Android işletim sisteminin genel bir davranışıdır ve Vakit tarafından ayrıca bir sunucuya gönderilmesi anlamına gelmez.</p>
+    </section>
+
+    <section class="policy-section" id="s9">
+      <div class="section-head"><span class="section-num">09</span><h2>Üçüncü Taraf Hizmetler</h2></div>
+      <p>Vakit'in kullandığı tek dış servis, namaz vakitlerini sağlayan <strong>vakit servisidir</strong> (<code>ezanvakti.emushaf.net</code>, Diyanet İşleri Başkanlığı kaynaklı veriler). Bu servise yapılan her istekte yalnızca seçili ilin sayısal kimlik kodu gönderilir; başka hiçbir bilgi (isim, konum, cihaz kimliği, çerez vb.) iletilmez. Bu istek yalnızca yeni vakit verisi gerektiğinde (önbellekte eksik gün varsa veya şehir değiştiğinde) yapılır.</p>
+      <div class="note">
+        <p><strong>Şeffaflık için ek bir not:</strong> Uygulamanın kullandığı bazı Android bileşenleri (konum ve bildirim altyapısı), Google'ın sağladığı bazı arka plan kütüphanelerini (ör. Google Play Hizmetleri konum bileşeni, Firebase Bildirim kütüphanesi) uygulama paketine dahil eder. Bu kütüphaneler uygulamada <strong>yapılandırılmamış ve etkin olarak kullanılmamaktadır</strong> — Vakit hiçbir push/itme bildirim sunucusuna kayıt olmaz, bu kütüphaneler üzerinden veri göndermez veya almaz. Bunlar, kullanılan Expo/React Native bileşenlerinin bir parçası olarak pakette bulunur.</p>
+      </div>
+      <p>Vakit'te reklam ağı, analiz (analytics) SDK'sı, çökme (crash) raporlama servisi veya kimlik doğrulama servisi <strong>bulunmamaktadır.</strong></p>
+    </section>
+
+    <section class="policy-section" id="s10">
+      <div class="section-head"><span class="section-num">10</span><h2>Reklam ve Analitik</h2></div>
+      <p>Vakit'te reklam gösterimi, reklam kimliği takibi, kullanım analitiği veya davranışsal izleme <strong>bulunmamaktadır.</strong> Uygulama hiçbir analiz veya reklam SDK'sı içermez.</p>
+    </section>
+
+    <section class="policy-section" id="s11">
+      <div class="section-head"><span class="section-num">11</span><h2>Verilerin Paylaşılması</h2></div>
+      <p>Vakit, kişisel verilerinizi üçüncü taraflarla <strong>satmaz, kiralamaz veya pazarlama amacıyla paylaşmaz.</strong> Yukarıda (Bölüm 5 ve 9) açıklandığı gibi, namaz vakitlerini hesaplayabilmek için yalnızca bir il kimliği, namaz vakti servisine iletilir. Bu, kişisel veri paylaşımı değil, teknik bir sorgu parametresidir ve başka hiçbir amaçla kullanılmaz.</p>
+    </section>
+
+    <section class="policy-section" id="s12">
+      <div class="section-head"><span class="section-num">12</span><h2>Veri Güvenliği</h2></div>
+      <p>Konum bilgisi, namaz kayıtlarınız ve tercihleriniz gibi veriler yalnızca cihazınızda saklandığından, bu verilerin bir sunucu ihlaline karşı riski bulunmamaktadır — çünkü bu veriler hiçbir sunucuda tutulmaz. Namaz vakti servisiyle olan tek bağlantı, standart şifreli bağlantı (HTTPS) üzerinden yapılır.</p>
+    </section>
+
+    <section class="policy-section" id="s13">
+      <div class="section-head"><span class="section-num">13</span><h2>Veri Saklama Süresi</h2></div>
+      <ul>
+        <li><strong>Kılınan namaz kayıtları:</strong> cihazda en fazla 30 gün tutulur, bu sürenin sonunda otomatik olarak silinir.</li>
+        <li><strong>Namaz vakitleri önbelleği:</strong> yaklaşık son bir aylık veri cihazda tutulur, daha eskisi otomatik olarak temizlenir.</li>
+        <li><strong>Konum, şehir, tercihler, tesbih sayacı:</strong> siz değiştirene veya uygulamayı kaldırana kadar cihazda saklanır; sunucu tarafında herhangi bir saklama süresi yoktur çünkü bu veriler sunucuya hiç gönderilmez.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section" id="s14">
+      <div class="section-head"><span class="section-num">14</span><h2>Veri Silme ve Kullanıcı Hakları</h2></div>
+      <p>Vakit'te işlenen tüm veriler cihazınızda tutulduğundan, verileriniz üzerinde tam kontrol sizdedir:</p>
+      <ul>
+        <li>Ayarlar ekranından şehrinizi, bildirim tercihlerinizi ve konum kullanımınızı istediğiniz zaman değiştirebilir veya kapatabilirsiniz.</li>
+        <li>Tesbih sayacını uygulama içindeki "Sıfırla" seçeneğiyle sıfırlayabilirsiniz.</li>
+        <li><strong>Uygulamayı cihazınızdan kaldırmanız, işlenen tüm verileri kalıcı olarak siler</strong> — çünkü bu veriler yalnızca cihazınızda tutulmaktadır ve başka hiçbir yerde bir kopyası bulunmaz.</li>
+      </ul>
+      <p>Verilerinizle ilgili sorularınız için Bölüm 18'deki iletişim bilgilerini kullanabilirsiniz.</p>
+    </section>
+
+    <section class="policy-section" id="s15">
+      <div class="section-head"><span class="section-num">15</span><h2>Çocukların Gizliliği</h2></div>
+      <p>Vakit, herhangi bir kullanıcıdan (yaşından bağımsız olarak) kişisel bilgi toplamaz; hesap oluşturma, isim veya iletişim bilgisi istenmez. Uygulama genel kullanıcı kitlesine yöneliktir ve çocuklara özel, hedeflenmiş bir veri toplama veya reklam mekanizması içermez.</p>
+    </section>
+
+    <section class="policy-section" id="s16">
+      <div class="section-head"><span class="section-num">16</span><h2>Uluslararası Veri Aktarımı</h2></div>
+      <p>Vakit, kişisel veri niteliğinde bir bilgiyi sunucuya göndermediğinden (bkz. Bölüm 5, 9, 11), kullanıcıya ait kişisel verilerin yurt dışına aktarımı söz konusu değildir. Namaz vakti servisine iletilen tek bilgi, kişisel veri sayılmayan bir il kimlik kodudur.</p>
+    </section>
+
+    <section class="policy-section" id="s17">
+      <div class="section-head"><span class="section-num">17</span><h2>Politika Değişiklikleri</h2></div>
+      <p>Bu Gizlilik Politikası, uygulamanın davranışı değiştikçe güncellenebilir. Önemli değişiklikler bu sayfada yayınlanacak ve "Yürürlük tarihi" bilgisi güncellenecektir. Politikayı düzenli olarak gözden geçirmenizi öneririz.</p>
+    </section>
+
+    <section class="policy-section" id="s18">
+      <div class="section-head"><span class="section-num">18</span><h2>İletişim</h2></div>
+      <p>Bu Gizlilik Politikası veya verilerinizin işlenmesiyle ilgili sorularınız için bizimle iletişime geçebilirsiniz:</p>
+      <ul>
+        <li><strong>E-posta:</strong> <a href="mailto:haydarkara@gmail.com">haydarkara@gmail.com</a></li>
+      </ul>
+    </section>
+
+    <section class="policy-section" id="s19">
+      <div class="section-head"><span class="section-num">19</span><h2>Yürürlük Tarihi</h2></div>
+      <p>Bu politika <strong>4 Eylül 2026</strong> tarihinde yürürlüğe girmiştir.</p>
+    </section>
+
+    <section class="policy-section" id="hosting" style="margin-top:8px;">
+      <div class="section-head"><span class="section-num" style="visibility:hidden;">•</span><h2 style="font-size:17px;">Bu Sayfa Nasıl Yayında</h2></div>
+      <p>Bu sayfa, Vakit'in GitHub deposundaki <code>docs/privacy.html</code> dosyasından <strong>GitHub Pages</strong> ile yayınlanmaktadır — statik, herkese açık, HTTPS bir adres; Google Play Console'un "Gizlilik Politikası" alanına doğrudan girilebilir.</p>
+      <div class="host-options">
+        <div class="host-option"><span class="host-num">1</span><div><b>Ayarlar → Pages</b> — depo ayarlarından Source: <code>main</code> dalı, <code>/docs</code> klasörü seçilerek etkinleştirildi.</div></div>
+        <div class="host-option"><span class="host-num">2</span><div><b>Güncelleme</b> — bu dosyada değişiklik yapıp <code>main</code>'e push ettiğinizde sayfa birkaç dakika içinde otomatik güncellenir.</div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  Vakit — Namaz Vakitleri &nbsp;·&nbsp; com.vakit.namazvakitleri &nbsp;·&nbsp; Bu sayfa uygulamanın kaynak kodu denetlenerek hazırlanmıştır.
+</footer>
+
+<script>
+  // Desktop'ta TOC her zaman açık kalsın (details/summary yalnızca mobilde
+  // katlanır durumda başlıyor); genişlik değiştiğinde senkron tutulur.
+  (function () {
+    var d = document.getElementById('toc-details');
+    function sync() {
+      if (window.innerWidth > 880) d.setAttribute('open', '');
+    }
+    sync();
+    window.addEventListener('resize', sync);
+  })();
+</script>
+</body>
+</html>
